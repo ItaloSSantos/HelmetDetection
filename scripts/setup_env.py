@@ -11,11 +11,15 @@ def setup_environment():
     print("🚫 A montagem do Google Drive deve ser feita manualmente no notebook com:")
     print("from google.colab import drive\ndrive.mount('/content/drive')\n")
 
-    # Instalar pacotes
-    run_cmd("pip install -q colab-env --upgrade")
+    # Clona repositório e vai para pasta do projeto
     run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
     os.chdir("/content/boxmot")
 
+    # Se quiser, pode instalar direto as libs do requirements.txt
+    # (garanta que o requirements.txt está na pasta /content/boxmot)
+    run_cmd("pip install -r requirements.txt")
+
+    # Se precisar de comandos específicos, pode continuar com eles
     run_cmd("pip uninstall -y torch torchvision torchaudio")
     run_cmd("pip install torch==2.3.0 torchvision==0.18.0 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
