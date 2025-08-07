@@ -1,4 +1,3 @@
-conteudo = """
 torch==2.3.0
 torchvision==0.18.0
 numpy==1.26.4
@@ -7,8 +6,3 @@ colab-env
 -e git+https://github.com/ItaloSSantos/boxmot.git@158e03a37e0f2df402850c256ea3e599b0849e49#egg=boxmot
 opencv-python
 opencv-contrib-python
-"""
-
-with open("/content/HelmetDetection/requirements.txt", "w") as f:
-    f.write(conteudo.strip())
-print("Arquivo requirements.txt criado!")
