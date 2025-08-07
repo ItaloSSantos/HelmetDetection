@@ -8,15 +8,11 @@ def run_cmd(cmd):
 def setup_environment():
     print("🚫 A montagem do Google Drive deve ser feita manualmente no notebook com:")
     print("from google.colab import drive\ndrive.mount('/content/drive')\n")
-
-    # Clona seu repositório principal
-    run_cmd("git clone https://github.com/ItaloSSantos/HelmetDetection.git")
-    
-    # Copia o boxmot para a pasta scripts (simulando seu fluxo)
-    run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git /content/HelmetDetection/scripts/boxmot")
-
     # Volta para a pasta raiz do projeto HelmetDetection
     os.chdir("/content/HelmetDetection")
+    
+    # Clona seu repositório principal
+    run_cmd("git clone https://github.com/ItaloSSantos/HelmetDetection.git")
 
     # Instala as dependências do requirements.txt, se existir
     if os.path.exists("requirements.txt"):
@@ -40,3 +36,4 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
