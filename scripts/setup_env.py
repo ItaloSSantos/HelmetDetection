@@ -12,20 +12,24 @@ def setup_environment():
     os.chdir("/content/HelmetDetection")
     
     # Clona seu repositório principal
-    run_cmd("git clone https://github.com/ItaloSSantos/HelmetDetection.git")
-
-    # Instala as dependências do requirements.txt, se existir
-    if os.path.exists("requirements.txt"):
-        run_cmd("pip install -r requirements.txt")
-    else:
-        print("⚠️ Arquivo requirements.txt não encontrado na raiz do projeto /content/HelmetDetection")
-
-    # Comandos específicos do seu setup (exemplo)
+    run_cmd("pip install -q colab-env --upgrade")
+    run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
+    os.chdir("/content/boxmot")
     run_cmd("pip uninstall -y torch torchvision torchaudio")
     run_cmd("pip install torch==2.3.0 torchvision==0.18.0 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
-    run_cmd("pip install -e ./scripts/boxmot")  # Instalando o boxmot via editable install
+    run_cmd("pip install -e .")
     run_cmd("pip install ultralytics")
+
+    # Verificação
+    try:
+        import torch
+        print(f"\n✅ PyTorch {torch.__version__} instalado corretamente!")
+    except Exception as e:
+        print(f"❌ Erro ao verificar PyTorch: {e}")
+        print("Reinicie o runtime manualmente no Colab.")
+
+if __name__ == "_
 
     try:
         import torch
@@ -36,4 +40,5 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
 
