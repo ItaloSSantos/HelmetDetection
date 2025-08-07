@@ -1,0 +1,61 @@
+import cv2
+import torch
+import time
+from pathlib import Path
+from ultralytics import YOLO
+
+model_path = Path("/content/drive/MyDrive/Colab Notebooks/FULL4_YOLO/checkpoints/yolov11n_SGD_1/weights/best.pt")
+model = YOLO(str(model_path)).eval()
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model.to(device)
+
+video_path = "/content/drive/MyDrive/Colab Notebooks/videos/RAW_VIDEOS/75fps/teste3_7.5fps.mp4"
+vid = cv2.VideoCapture(video_path)
+
+historico_classes = []
+qnte_frames = 30
+lim_frames = 21
+batch_size = 8
+fps = 30
+frame_count = 0
+start_time = time.time()
+
+try:
+    while True:
+        frames_batch = []
+        for _ in range(batch_size):
+            ret, frame = vid.read()
+            if not ret:
+                break
+            frame_count += 1
+            frames_batch.append(frame)
+
+        if not frames_batch:
+            break
+
+        results = model.predict(source=frames_batch, conf=0.5, verbose=False, device=device)
+
+        for result in results:
+            classes_detectadas = [int(box.cls.item()) for box in result.boxes if box.cls is not None]
+
+            if classes_detectadas:
+                historico_classes.extend(classes_detectadas)
+                historico_classes = historico_classes[-qnte_frames:]
+
+                if len(historico_classes) >= qnte_frames and historico_classes.count(0) >= lim_frames:
+                    timestamp = frame_count / fps
+                    minutos = int(timestamp // 60)
+                    segundos = timestamp % 60
+                    print(f"ALERTA: Detectado {lim_frames} ocorrências da classe 0! Tempo: {minutos:02d}:{segundos:05.2f} s")
+                    historico_classes = []
+
+finally:
+    total_time = time.time() - start_time
+    avg_fps = frame_count / total_time if total_time > 0 else 0
+
+    print(f"\nProcessamento concluído!")
+    print(f"Tempo total: {total_time:.2f} segundos")
+    print(f"FPS do vídeo: {fps} quadros por segundo")
+    print(f"FPS de processamento: {avg_fps:.2f} quadros por segundo")
+
+    vid.release()
