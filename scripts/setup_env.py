@@ -14,7 +14,7 @@ def setup_environment():
     
     # Clona seu repositório principal
     run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
-    os.chdir("/content/boxmot")
+    os.chdir("/content/HelmetDetection/boxmot")
     run_cmd("pip uninstall -y torch torchvision torchaudio")
     run_cmd("pip install torch==2.3.0 torchvision==0.18.0 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
@@ -31,3 +31,4 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
