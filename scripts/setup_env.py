@@ -1,32 +1,34 @@
 import os
 import subprocess
-import sys
 
 def run_cmd(cmd):
     print(f"Executando: {cmd}")
     subprocess.run(cmd, shell=True, check=True)
 
 def setup_environment():
-    # Montar o Google Drive manualmente no Colab (não automatizável aqui)
     print("🚫 A montagem do Google Drive deve ser feita manualmente no notebook com:")
     print("from google.colab import drive\ndrive.mount('/content/drive')\n")
 
-    # Clona repositório e vai para pasta do projeto
-    run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
-    os.chdir("/content/boxmot")
+    # Clona seu repositório principal (HelmetDetection)
+    run_cmd("git clone https://github.com/ItaloSSantos/HelmetDetection.git")
+    
+    # Navega para a pasta do boxmot dentro do seu projeto
+    os.chdir("/content/HelmetDetection/scripts/boxmot")
 
-    # Se quiser, pode instalar direto as libs do requirements.txt
-    # (garanta que o requirements.txt está na pasta /content/boxmot)
-    run_cmd("pip install -r requirements.txt")
+    # Instala as dependências listadas no requirements.txt (se existir)
+    if os.path.exists("requirements.txt"):
+        run_cmd("pip install -r requirements.txt")
+    else:
+        print("⚠️ Arquivo requirements.txt não encontrado na pasta /content/HelmetDetection/scripts/boxmot")
 
-    # Se precisar de comandos específicos, pode continuar com eles
+    # Comandos específicos que deseja rodar:
     run_cmd("pip uninstall -y torch torchvision torchaudio")
     run_cmd("pip install torch==2.3.0 torchvision==0.18.0 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
     run_cmd("pip install -e .")
     run_cmd("pip install ultralytics")
 
-    # Verificação
+    # Verificação simples da instalação do torch
     try:
         import torch
         print(f"\n✅ PyTorch {torch.__version__} instalado corretamente!")
