@@ -6,8 +6,6 @@ def run_cmd(cmd):
     subprocess.run(cmd, shell=True, check=True)
 
 def setup_environment():
-    print("🚫 A montagem do Google Drive deve ser feita manualmente no notebook com:")
-    print("from google.colab import drive\ndrive.mount('/content/drive')\n")
     
     # Volta para a pasta raiz do projeto HelmetDetection
     os.chdir("/content/HelmetDetection")
@@ -31,4 +29,5 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
 
