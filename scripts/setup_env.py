@@ -25,7 +25,7 @@ def setup_environment():
         import torch
         print(f"\n✅ PyTorch {torch.__version__} instalado corretamente!")
     except Exception as e:
-        print(f"❌ Erro ao verificar PyTorch: {e}")
+        print(f"Erro ao verificar PyTorch: {e}")
         print("Reinicie o runtime manualmente no Colab.")
 
 if __name__ == "__main__":
