@@ -6,7 +6,7 @@ def run_cmd(cmd):
     subprocess.run(cmd, shell=True, check=True)
 
 def setup_environment():
-    os.chdir("/content/HelmetDetection")
+    os.chdir("/content")
     
     if not os.path.exists("boxmot"):
         run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
@@ -30,5 +30,6 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
 
 
