@@ -21,6 +21,4 @@ Este projeto realiza a detecção e rastreamento do uso de capacetes de seguran�
 - Run the Filter file: !python /content/HelmetDetection/scripts/Filtro1_
 
 ## Results : 
-
-
-<!--![3](https://user-images.githubusercontent.com/103372852/233774758-180186a2-8267-495b-8c04-0d43778299d2.PNG)-->
+![Detecção e Rastreamento](results/ppe_StrongSort.gif)
