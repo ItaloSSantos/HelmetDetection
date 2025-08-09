@@ -14,7 +14,7 @@ def setup_environment():
         print("Repositório boxmot já clonado.")
     
     run_cmd("pip uninstall -y torch torchvision torchaudio")
-    run_cmd("pip install torch==2.6.0 torchvision==0.17.1 --extra-index-url https://download.pytorch.org/whl/cu121")
+    run_cmd("pip install torch==2.2.1 torchvision==0.17.1 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
     
     os.chdir("boxmot")
@@ -30,4 +30,5 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
+
 
