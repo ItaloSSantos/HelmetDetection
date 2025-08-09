@@ -6,20 +6,21 @@ def run_cmd(cmd):
     subprocess.run(cmd, shell=True, check=True)
 
 def setup_environment():
-    
-    # Volta para a pasta raiz do projeto HelmetDetection
     os.chdir("/content/HelmetDetection")
     
-    # Clona seu repositório principal
-    run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
-    os.chdir("/content/HelmetDetection/boxmot")
+    if not os.path.exists("boxmot"):
+        run_cmd("git clone https://github.com/ItaloSSantos/boxmot.git")
+    else:
+        print("Repositório boxmot já clonado.")
+    
     run_cmd("pip uninstall -y torch torchvision torchaudio")
-    run_cmd("pip install torch==2.3.0 torchvision==0.18.0 --extra-index-url https://download.pytorch.org/whl/cu121")
+    run_cmd("pip install torch==2.6.0 torchvision==0.17.1 --extra-index-url https://download.pytorch.org/whl/cu121")
     run_cmd("pip install numpy==1.26.4")
-    run_cmd("pip install -e .")
+    
+    os.chdir("boxmot")
     run_cmd("pip install ultralytics")
-
-    # Verificação
+    run_cmd("pip install -e .")
+    
     try:
         import torch
         print(f"\n✅ PyTorch {torch.__version__} instalado corretamente!")
@@ -29,5 +30,3 @@ def setup_environment():
 
 if __name__ == "__main__":
     setup_environment()
-
-
