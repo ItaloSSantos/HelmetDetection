@@ -39,7 +39,7 @@ tracker = StrongSort(
 
 
 video_name = Path(video_path).stem  
-output_video_path = f"{output_dir}{video_name}_StrongSort_batch.mp4"
+output_video_path = f"{output_dir}{video_name}_StrongSort.mp4"
 
 os.makedirs(output_dir, exist_ok=True)
 if os.path.exists(output_video_path):
