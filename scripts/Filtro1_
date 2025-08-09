@@ -9,7 +9,7 @@ model = YOLO(str(model_path)).eval()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
 
-video_path = "/content/drive/MyDrive/Colab Notebooks/videos/RAW_VIDEOS/75fps/teste3_7.5fps.mp4"
+video_path = "/content/HelmetDetection/videos/input/ppe-2.mp4"
 vid = cv2.VideoCapture(video_path)
 
 historico_classes = []
