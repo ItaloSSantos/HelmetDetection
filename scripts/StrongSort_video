@@ -1,0 +1,137 @@
+import cv2
+import torch
+import numpy as np
+from pathlib import Path
+from ultralytics import YOLO
+from boxmot import StrongSort
+import os
+
+yolo_model_path = Path("/content/HelmetDetection/models/best.pt")
+video_path = "/content/HelmetDetection/videos/input/ppe-2.mp4"
+output_dir = "/content/HelmetDetection/results/"
+batch_size = 8  
+conf_threshold = 0.5
+
+cuda_available = torch.cuda.is_available()
+device = '0' if cuda_available else 'cpu'
+print(f"Usando dispositivo: {'CUDA' if cuda_available else 'CPU'}")
+
+if not yolo_model_path.exists():
+    raise FileNotFoundError(f"O modelo YOLO não foi encontrado: {yolo_model_path}")
+
+print("Carregando YOLO...")
+model = YOLO(str(yolo_model_path)).to('cuda' if cuda_available else 'cpu').eval()
+print("Modelo carregado!")
+
+tracker = StrongSort(
+    reid_weights=Path("osnet_x0_25_msmt17.pt"),
+    device=device,
+    half=True,
+    per_class=False,
+    max_cos_dist=0.3,
+    max_iou_dist=0.6,
+    max_age=8,
+    n_init=3,
+    nn_budget=10,
+    mc_lambda=0.95,
+    ema_alpha=0.4
+)
+
+
+video_name = Path(video_path).stem  
+output_video_path = f"{output_dir}{video_name}_StrongSort_batch.mp4"
+
+os.makedirs(output_dir, exist_ok=True)
+if os.path.exists(output_video_path):
+    os.remove(output_video_path)
+
+vid = cv2.VideoCapture(video_path)
+if not vid.isOpened():
+    raise FileNotFoundError(f"Não foi possível abrir o vídeo: {video_path}")
+
+frame_width = int(vid.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
+fps = vid.get(cv2.CAP_PROP_FPS)
+
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
+
+print("Iniciando processamento...")
+
+frames_buffer = []
+frames_idx = []  
+
+frame_count = 0
+while True:
+    ret, frame = vid.read()
+    if not ret:
+        break
+
+    frames_buffer.append(frame)
+    frames_idx.append(frame_count)
+    frame_count += 1
+
+    # Quando atingir o batch_size, processa
+    if len(frames_buffer) == batch_size:
+        results_batch = model.predict(frames_buffer, conf=conf_threshold, verbose=False)
+        
+        for frame_i, results in zip(frames_buffer, results_batch):
+            dets = []
+            for box in results.boxes:
+                bbox = box.xyxy.cpu().numpy()[0]
+                conf = box.conf.cpu().item()
+                cls = box.cls.cpu().item()
+                dets.append([*bbox, conf, cls])
+            dets = np.array(dets)
+
+            tracker.update(dets, frame_i)
+
+            for track in tracker.tracker.tracks:
+                if not track.is_confirmed() or track.time_since_update >= 1:
+                    continue
+                x1, y1, x2, y2 = track.to_tlbr()
+                track_id = track.id
+                track_cls = track.cls
+                track_conf = getattr(track, 'conf', 0.0)
+                label = f"ID:{int(track_id)} Conf:{track_conf:.2f} Cls:{int(track_cls)}"
+                color = (0, 255, 0)
+                cv2.rectangle(frame_i, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+                cv2.putText(frame_i, label, (int(x1), int(y1) - 10), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+            out.write(frame_i)
+
+        frames_buffer.clear()
+        frames_idx.clear()
+
+# Processar frames restantes no buffer
+if frames_buffer:
+    results_batch = model.predict(frames_buffer, conf=conf_threshold, verbose=False)
+    for frame_i, results in zip(frames_buffer, results_batch):
+        dets = []
+        for box in results.boxes:
+            bbox = box.xyxy.cpu().numpy()[0]
+            conf = box.conf.cpu().item()
+            cls = box.cls.cpu().item()
+            dets.append([*bbox, conf, cls])
+        dets = np.array(dets)
+
+        tracker.update(dets, frame_i)
+        for track in tracker.tracker.tracks:
+            if not track.is_confirmed() or track.time_since_update >= 1:
+                continue
+            x1, y1, x2, y2 = track.to_tlbr()
+            track_id = track.id
+            track_cls = track.cls
+            track_conf = getattr(track, 'conf', 0.0)
+            label = f"ID:{int(track_id)} Conf:{track_conf:.2f} Cls:{int(track_cls)}"
+            color = (0, 255, 0)
+            cv2.rectangle(frame_i, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
+            cv2.putText(frame_i, label, (int(x1), int(y1) - 10), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+
+        out.write(frame_i)
+
+vid.release()
+out.release()
+print(f"Processamento concluído ! Vídeo salvo em: {output_video_path}")
