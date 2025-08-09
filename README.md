@@ -12,7 +12,7 @@ Este projeto realiza a detecção e rastreamento do uso de capacetes de seguran�
 - Python 3.10
 
 
-## Installation in COLAB enviroment: 
+## Installation in COLAB environment
 
 - clone the repository : !git clone https://github.com/ItaloSSantos/HelmetDetection.git
 - change the directory : %cd /content/HelmetDetection/scripts
