@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from ultralytics import YOLO
 
-model_path = Path("/content/drive/MyDrive/Colab Notebooks/FULL4_YOLO/checkpoints/yolov11n_SGD_1/weights/best.pt")
+model_path = Path("/content/HelmetDetection/models/best.pt")
 model = YOLO(str(model_path)).eval()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model.to(device)
