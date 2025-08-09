@@ -7,7 +7,7 @@ from boxmot import StrongSort
 import os
 
 yolo_model_path = Path("/content/HelmetDetection/models/best.pt")
-video_path = "/content/HelmetDetection/videos/input/ppe-2.mp4"
+video_path = "/content/HelmetDetection/videos/input/ppe.mp4"
 output_dir = "/content/HelmetDetection/results/"
 batch_size = 8  
 conf_threshold = 0.5
