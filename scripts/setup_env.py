@@ -22,11 +22,11 @@ def setup_environment():
     run_cmd("pip install -e .")
     run_cmd("pip install transformers==4.41.0 safetensors==0.4.3")
     try:
-        import torch
-        print(f"\n PyTorch {torch.__versio
-        print("REINICIE MANUALMENTE A SESSÃO.")
+      import torch
+      print(f"\nPyTorch {torch.__version__} instalado corretamente!")
+      print("REINICIE MANUALMENTE A SESSÃO PARA APLICAR AS ALTERAÇÕES.")
     except Exception as e:
-        print(f"Erro ao verificar PyTorch: {e}")
+      print(f"Erro ao verificar PyTorch: {e}")
     
 
 if __name__ == "__main__":
