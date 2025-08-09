@@ -20,13 +20,13 @@ def setup_environment():
     os.chdir("boxmot")
     run_cmd("pip install ultralytics")
     run_cmd("pip install -e .")
-    
+    run_cmd("pip install transformers==4.41.0 safetensors==0.4.3")
     try:
         import torch
-        print(f"\n✅ PyTorch {torch.__version__} instalado corretamente!")
+        print(f"\n PyTorch {torch.__version__} instalado corretamente!")
     except Exception as e:
         print(f"Erro ao verificar PyTorch: {e}")
-        print("Reinicie o runtime manualmente no Colab.")
+        print("REINICIE MANUALMENTE A SESSÃO.")
 
 if __name__ == "__main__":
     setup_environment()
