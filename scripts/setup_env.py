@@ -15,7 +15,7 @@ def setup_environment():
     
     run_cmd("pip uninstall -y torch torchvision torchaudio")
     run_cmd("pip install torch==2.2.1 torchvision==0.17.1 --extra-index-url https://download.pytorch.org/whl/cu121")
-    run_cmd("pip install numpy==1.26.4")
+    run_cmd("pip install numpy==2.0.0")
     
     os.chdir("boxmot")
     run_cmd("pip install ultralytics")
@@ -23,10 +23,11 @@ def setup_environment():
     run_cmd("pip install transformers==4.41.0 safetensors==0.4.3")
     try:
         import torch
-        print(f"\n PyTorch {torch.__version__} instalado corretamente!")
+        print(f"\n PyTorch {torch.__versio
+        print("REINICIE MANUALMENTE A SESSÃO.")
     except Exception as e:
         print(f"Erro ao verificar PyTorch: {e}")
-        print("REINICIE MANUALMENTE A SESSÃO.")
+    
 
 if __name__ == "__main__":
     setup_environment()
