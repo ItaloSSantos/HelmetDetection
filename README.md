@@ -11,14 +11,15 @@ Este projeto realiza a detecção e rastreamento do uso de capacetes de seguran�
 - tochvision 
 - Python 3.10
 
-
 ## Installation in COLAB environment
 
-- clone the repository : !git clone https://github.com/ItaloSSantos/HelmetDetection.git
-- change the directory : %cd /content/HelmetDetection/scripts
+- Clone the repository: !git clone https://github.com/ItaloSSantos/HelmetDetection.git  
+- Change the directory: %cd /content/HelmetDetection/scripts  
 - Run the configuration file: !python setup_env.py
-- Upload an Image/Video to detect object
-- Run the Filter file: !python /content/HelmetDetection/scripts/Filtro1_
+- Restart the session 
+- Upload an image or video to detect objects  
+- Choose the mode and run the file: !python /content/HelmetDetection/scripts...
+
 
 ## Results : 
 ![Detecção e Rastreamento](results/ppe_StrongSort.gif)
