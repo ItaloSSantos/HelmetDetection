@@ -11,15 +11,14 @@ Este projeto realiza a detecção e rastreamento do uso de capacetes de seguran�
 - tochvision 
 - Python 3.10
 
-## Installation : 
 
-- clone the repository : `$ git clone https://github.com/Vinayakmane47/PPE_detection_YOLO.git`
-- create a conda environment : `$ conda create -n myyolo python=3.10 -y`
-- Intall and install libraries : `$ pip install -r setup_env.py`
-- Upload Image/Video to detect obj
-- Run filtros : `Filtro_1` or 'Filtro_bot' or 'Filtro_strong'
+## Installation in COLAB enviroment: 
 
-
+- clone the repository : !git clone https://github.com/ItaloSSantos/HelmetDetection.git
+- change the directory : %cd /content/HelmetDetection/scripts
+- Run the configuration file: !python setup_env.py
+- Upload an Image/Video to detect object
+- Run the Filter file: !python /content/HelmetDetection/scripts/Filtro1_
 
 ## Results : 
 
